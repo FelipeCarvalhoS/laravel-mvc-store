@@ -7,7 +7,7 @@
         "laravel",
         "framework"
     ],
-    "license": "MIT",
+    "license": "None",
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.8",
@@ -53,6 +53,13 @@
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
+        ],
+        "docker:rebuild": [
+            "docker rmi store:latest --force",
+            "docker build . --tag store"
+        ],
+        "docker:run": [
+            "docker run -it --rm -p 8000:8000 store"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
