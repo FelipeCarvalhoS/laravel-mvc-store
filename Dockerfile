@@ -24,10 +24,12 @@ FROM node:22-slim AS frontend
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN node --version \
+    && npm --version \
+    && npm ci --include=dev
 
 COPY . .
-RUN npm run build
+RUN npm run build -- --debug
 
 
 # ---------- Production ----------
