@@ -1,24 +1,40 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import { bunny } from 'laravel-vite-plugin/fonts';
-import tailwindcss from '@tailwindcss/vite';
+import { google } from 'laravel-vite-plugin/fonts';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/js/app.js'],
+            assets: ['resources/img/**'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                google('Outfit', {
+                    weights: [400, 500, 600, 700],
+                    fallbacks: ['sans-serif'],
+                }),
+                google('Barlow', {
+                    weights: [400, 500, 600, 700],
+                    fallbacks: ['sans-serif'],
                 }),
             ],
         }),
-        tailwindcss(),
     ],
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
+        },
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: [
+                    'import',
+                    'mixed-decls',
+                    'color-functions',
+                    'global-builtin',
+                ],
+            },
         },
     },
 });

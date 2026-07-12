@@ -3,5 +3,5 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
-Route::get('/', fn () => redirect(route('produtos.index')));
-Route::resource('produtos', ProductController::class);
+Route::get('/', fn () => redirect(route('products.index')));
+Route::resource('products', ProductController::class);

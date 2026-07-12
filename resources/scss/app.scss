@@ -1,0 +1,215 @@
+/**********************************************************************************************
+1. Import functions
+**********************************************************************************************/
+
+@import 'bootstrap/scss/functions';
+
+/**********************************************************************************************
+2. Variable overrides
+**********************************************************************************************/
+
+//
+// Options
+//
+
+$enable-dark-mode: false;
+
+//
+// Spacing
+//
+
+$spacer: 1rem;
+
+//
+// Typography
+//
+$font-family-base: 'Barlow', sans-serif;
+$font-size-base: 1rem;
+$font-weight-base: 300;
+// $font-weight-xlight: 200;
+
+$headings-font-family: 'Outfit', sans-serif;
+$headings-font-weight: 600;
+$headings-margin-bottom: 0;
+
+$step: 0.25rem;
+$h6-font-size: $font-size-base; // 16px
+$h5-font-size: $h6-font-size + $step; // 20px
+$h4-font-size: $h5-font-size + $step; // 24px
+$h3-font-size: $h4-font-size + $step; // 28px
+$h2-font-size: $h3-font-size + $step; // 32px
+$h1-font-size: $h2-font-size + $step * 2; // 40px
+
+$display-font-weight: $headings-font-weight;
+
+//
+// Colors
+//
+
+// $highlight: oklch(1 0.2 264);
+// $border-muted: oklch(0.7 0.2 264);
+
+$body-color: hsl(0, 0%, 4%);
+$body-secondary-color: hsl(0, 0%, 28%);
+$body-tertiary-color: hsl(0, 0%, 52%);
+$body-bg: hsl(0, 0%, 100%);
+$body-secondary-bg: hsl(0, 0%, 96%);
+$body-tertiary-bg: hsl(0, 0%, 92%);
+$border-color: #cccccc;
+
+$primary: #F04632;
+$secondary: #458B1F;
+$tertiary: #F37032;
+$info: hsl(216, 98%, 48%);
+$success: hsl(120, 100%, 40%);
+$danger: hsl(0, 100%, 50%);
+
+//
+// Navbar
+//
+
+$navbar-padding-y: 0;
+$navbar-brand-margin-end: 0;
+$navbar-nav-link-padding-x: 0;
+$navbar-light-color: $body-color;
+$navbar-light-hover-color: $secondary;
+$navbar-light-active-color: $navbar-light-hover-color;
+$navbar-light-icon-color: $navbar-light-color;
+$navbar-light-brand-color: $navbar-light-color;
+$navbar-light-toggler-border-color: transparent;
+$navbar-toggler-focus-width: 0;
+
+//
+// Dropdowns
+//
+
+$dropdown-padding-y: 0;
+// $dropdown-spacer:           .25rem;
+// $dropdown-color:            $navbar-light-color;
+// $dropdown-bg:               $dark;
+// $dropdown-border-color:     #8B8B8B;
+// $dropdown-link-color:       $dropdown-color;
+// $dropdown-link-hover-bg:    $primary;
+// $dropdown-link-active-bg:   $dropdown-link-hover-bg;
+// $dropdown-divider-bg:       $dropdown-border-color;
+// $dropdown-divider-margin-y: 0;
+// $dropdown-item-padding-y:   $spacer * .5;
+
+//
+// Offcanvas
+//
+
+$offcanvas-padding-x: 1.5rem;
+$offcanvas-horizontal-width: min(100vw, 20rem);
+
+//
+// Shadows
+//
+
+// $box-shadow-sm: 0 .25rem .25rem rgba(0, 0, 0, .075);
+// $box-shadow-strong: 0.3125rem 0.3125rem 0.3125rem -0.125rem rgba(0, 0, 0, 0.5);
+
+//
+// Buttons
+//
+
+$btn-padding-y-lg: 0.5rem;
+$btn-padding-x-lg: $btn-padding-y-lg * 3;
+// $btn-border-radius-lg: 1rem;
+// $btn-font-weight:      300;
+
+//
+// Accordion
+//
+
+$accordion-button-icon: url('/img/icons/accordion-btn-icon.svg');
+
+/**********************************************************************************************
+3. Import remainder of required Bootstrap parts
+**********************************************************************************************/
+
+@import 'bootstrap/scss/variables';
+// @import "bootstrap/scss/variables-dark";
+
+/**********************************************************************************************
+4. Map overrides
+**********************************************************************************************/
+
+$display-font-sizes: (
+    1: 4.5rem,
+    // 72px
+    2: 3rem,
+    // 48px
+);
+
+$spacers: (
+    0: 0,
+    1: $spacer * 0.25,
+    2: $spacer * 0.5,
+    3: $spacer,
+    4: $spacer * 1.5,
+    5: $spacer * 3,
+    6: $spacer * 4.5,
+);
+
+$theme-colors: map-remove($theme-colors, 'light', 'dark');
+$theme-colors: map-merge($theme-colors, (
+    'tertiary': $tertiary,
+));
+
+/**********************************************************************************************
+5. Import remainder of required Bootstrap parts
+**********************************************************************************************/
+
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/root';
+
+/**********************************************************************************************
+6. Import other optional stylesheets
+**********************************************************************************************/
+
+@import 'bootstrap/scss/reboot';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/images';
+@import 'bootstrap/scss/containers';
+@import 'bootstrap/scss/grid';
+@import "bootstrap/scss/forms";
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/transitions';
+@import 'bootstrap/scss/dropdown';
+@import "bootstrap/scss/button-group";
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/accordion';
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/alert';
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/modal';
+@import 'bootstrap/scss/tooltip';
+@import 'bootstrap/scss/offcanvas';
+// @import "bootstrap/scss/progress";
+// @import "bootstrap/scss/pagination";
+// @import "bootstrap/scss/breadcrumb";
+// @import "bootstrap/scss/list-group";
+// @import 'bootstrap/scss/toasts';
+// @import "bootstrap/scss/popover";
+// @import "bootstrap/scss/spinners";
+// @import "bootstrap/scss/carousel";
+// @import "bootstrap/scss/placeholders";
+// @import "bootstrap/scss/tables";
+@import 'bootstrap/scss/helpers';
+@import 'bootstrap/scss/utilities';
+
+/**********************************************************************************************
+7. Customize Bootstrap's utility API
+**********************************************************************************************/
+
+@import 'bootstrap/scss/utilities/api';
+
+/**********************************************************************************************
+8. Other custom styles
+**********************************************************************************************/
+
+@import 'custom';
