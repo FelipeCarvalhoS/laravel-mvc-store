@@ -80,11 +80,15 @@
                     </div>
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
-                    @foreach ($products as $product)
+                    @forelse ($products as $product)
                         <div class="col">
                             <div class="card shadow-sm h-100">
                                 <div class="border-bottom d-flex justify-content-center bg-body-tertiary">
-                                    <img class="p-4 w-50 mx-auto" src="{{ Vite::asset('resources/img/logo.png') }}">
+                                    <img
+                                        class="p-4 w-50 mx-auto"
+                                        src="{{ Vite::asset('resources/img/logo.png') }}"
+                                        alt=""
+                                    >
                                 </div>
                                 <div class="card-body d-flex flex-column justify-content-between gap-3">
                                     <div>
@@ -138,7 +142,16 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="p-5 mx-auto">
+                            <img
+                                src="{{ Vite::asset('resources/img/logo.png') }}"
+                                alt=""
+                                class="mx-auto"
+                            >
+                            <p class="text-center mb-0">Nenhum produto encontrado.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </main>
