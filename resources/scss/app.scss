@@ -57,11 +57,10 @@ $body-secondary-bg: hsl(0, 0%, 96%);
 $body-tertiary-bg: hsl(0, 0%, 92%);
 $border-color: #cccccc;
 
-$primary: #F04632;
-$secondary: #458B1F;
-$tertiary: #F37032;
+$primary: #F37032;
+$secondary: #92D50A;
 $info: hsl(216, 98%, 48%);
-$success: hsl(120, 100%, 40%);
+$success: #458B1F;
 $danger: hsl(0, 100%, 50%);
 
 //
@@ -153,9 +152,6 @@ $spacers: (
 );
 
 $theme-colors: map-remove($theme-colors, 'light', 'dark');
-$theme-colors: map-merge($theme-colors, (
-    'tertiary': $tertiary,
-));
 
 /**********************************************************************************************
 5. Import remainder of required Bootstrap parts
@@ -211,5 +207,11 @@ $theme-colors: map-merge($theme-colors, (
 /**********************************************************************************************
 8. Other custom styles
 **********************************************************************************************/
+
+// Update the import directory to point to it‘s location within node_modules
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+
+// Import the Sass files as usual
+@import "bootstrap-icons/font/bootstrap-icons";
 
 @import 'custom';

@@ -5,3 +5,27 @@
 .font-base {
     font-family: $font-family-base;
 }
+
+.icon-btn {
+    all: unset;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &-danger {
+        &:hover, &:focus-visible {
+            color: $danger;
+        }
+    }
+
+    &-info {
+        &:hover, &:focus-visible {
+            color: $info;
+        }
+    }
+
+    &:focus-visible {
+        @extend .focus-ring;
+    }
+}
