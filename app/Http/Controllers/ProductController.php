@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,7 @@ class ProductController extends Controller
     {
         $name = $request->query('name');
         $filtered_products = Product::where('name', 'like', "%$name%")->get();
-        return view('products.index', ['products' => $filtered_products, 'categories' => Category::all()]);
+        return Inertia::render('ProductsIndex', ['products' => $filtered_products, 'categories' => Category::all()]);
     }
 
     public function create()
