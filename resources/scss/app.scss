@@ -2,7 +2,7 @@
 1. Import functions
 **********************************************************************************************/
 
-@import 'bootstrap/scss/functions';
+@import "bootstrap/scss/functions";
 
 /**********************************************************************************************
 2. Variable overrides
@@ -23,12 +23,12 @@ $spacer: 1rem;
 //
 // Typography
 //
-$font-family-base: 'Barlow', sans-serif;
+$font-family-base: "Barlow", sans-serif;
 $font-size-base: 1rem;
 $font-weight-base: 300;
 // $font-weight-xlight: 200;
 
-$headings-font-family: 'Outfit', sans-serif;
+$headings-font-family: "Outfit", sans-serif;
 $headings-font-weight: 600;
 $headings-margin-bottom: 0;
 
@@ -57,10 +57,10 @@ $body-secondary-bg: hsl(0, 0%, 96%);
 $body-tertiary-bg: hsl(0, 0%, 92%);
 $border-color: #cccccc;
 
-$primary: #F37032;
-$secondary: #92D50A;
+$primary: #f37032;
+$secondary: #92d50a;
 $info: hsl(216, 98%, 48%);
-$success: #458B1F;
+$success: #458b1f;
 $danger: hsl(0, 100%, 50%);
 
 //
@@ -121,13 +121,13 @@ $btn-padding-x-lg: $btn-padding-y-lg * 3;
 // Accordion
 //
 
-$accordion-button-icon: url('/img/icons/accordion-btn-icon.svg');
+$accordion-button-icon: url("/img/icons/accordion-btn-icon.svg");
 
 /**********************************************************************************************
 3. Import remainder of required Bootstrap parts
 **********************************************************************************************/
 
-@import 'bootstrap/scss/variables';
+@import "bootstrap/scss/variables";
 // @import "bootstrap/scss/variables-dark";
 
 /**********************************************************************************************
@@ -137,8 +137,7 @@ $accordion-button-icon: url('/img/icons/accordion-btn-icon.svg');
 $display-font-sizes: (
     1: 4.5rem,
     // 72px
-    2: 3rem,
-    // 48px
+    2: 3rem, // 48px
 );
 
 $spacers: (
@@ -151,58 +150,58 @@ $spacers: (
     6: $spacer * 4.5,
 );
 
-$theme-colors: map-remove($theme-colors, 'light', 'dark');
+$theme-colors: map-remove($theme-colors, "light", "dark");
 
 /**********************************************************************************************
 5. Import remainder of required Bootstrap parts
 **********************************************************************************************/
 
-@import 'bootstrap/scss/maps';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/root';
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
 
 /**********************************************************************************************
 6. Import other optional stylesheets
 **********************************************************************************************/
 
-@import 'bootstrap/scss/reboot';
-@import 'bootstrap/scss/type';
-@import 'bootstrap/scss/images';
-@import 'bootstrap/scss/containers';
-@import 'bootstrap/scss/grid';
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
 @import "bootstrap/scss/forms";
-@import 'bootstrap/scss/buttons';
-@import 'bootstrap/scss/transitions';
-@import 'bootstrap/scss/dropdown';
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
 @import "bootstrap/scss/button-group";
-@import 'bootstrap/scss/nav';
-@import 'bootstrap/scss/navbar';
-@import 'bootstrap/scss/card';
-@import 'bootstrap/scss/accordion';
-@import 'bootstrap/scss/badge';
-@import 'bootstrap/scss/alert';
-@import 'bootstrap/scss/close';
-@import 'bootstrap/scss/modal';
-@import 'bootstrap/scss/tooltip';
-@import 'bootstrap/scss/offcanvas';
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/offcanvas";
 // @import "bootstrap/scss/progress";
 // @import "bootstrap/scss/pagination";
 // @import "bootstrap/scss/breadcrumb";
 // @import "bootstrap/scss/list-group";
 // @import 'bootstrap/scss/toasts';
 // @import "bootstrap/scss/popover";
-// @import "bootstrap/scss/spinners";
+@import "bootstrap/scss/spinners";
 // @import "bootstrap/scss/carousel";
 // @import "bootstrap/scss/placeholders";
 // @import "bootstrap/scss/tables";
-@import 'bootstrap/scss/helpers';
-@import 'bootstrap/scss/utilities';
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities";
 
 /**********************************************************************************************
 7. Customize Bootstrap's utility API
 **********************************************************************************************/
 
-@import 'bootstrap/scss/utilities/api';
+@import "bootstrap/scss/utilities/api";
 
 /**********************************************************************************************
 8. Other custom styles
@@ -214,4 +213,4 @@ $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
 // Import the Sass files as usual
 @import "bootstrap-icons/font/bootstrap-icons";
 
-@import 'custom';
+@import "custom";

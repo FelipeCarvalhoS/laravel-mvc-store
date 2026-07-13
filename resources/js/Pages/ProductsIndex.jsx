@@ -19,21 +19,22 @@ function limitText(text, limit = 100) {
 
 export default function ProductsIndex({ products, categories }) {
     const [productList, setProducts] = useState(products);
+    const [isLoading, setIsLoading] = useState(false);
     const searchRef = useRef(null);
 
     function handleSearch(event) {
-        console.log(productList);
+        setIsLoading(true);
 
         const searchParams = new URLSearchParams({
             name: searchRef.current.value,
         }).toString();
-        const url = `http://localhost:8000/api/products?${searchParams}`;
+        const url = `${import.meta.env.VITE_APP_URL}/api/products?${searchParams}`;
 
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 setProducts(data);
+                setIsLoading(false);
             });
     }
 
@@ -60,9 +61,27 @@ export default function ProductsIndex({ products, categories }) {
                                         type="button"
                                         id="search-button"
                                         onClick={handleSearch}
+                                        disabled={isLoading}
                                     >
-                                        Pesquisar
-                                        <i className="bi bi-search ms-2"></i>
+                                        {isLoading ? (
+                                            <>
+                                                <span
+                                                    role="status"
+                                                    class="me-2"
+                                                >
+                                                    Pesquisando...
+                                                </span>
+                                                <span
+                                                    class="spinner-border spinner-border-sm"
+                                                    aria-hidden="true"
+                                                ></span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                Pesquisar
+                                                <i className="bi bi-search ms-2"></i>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             </div>
@@ -94,7 +113,7 @@ export default function ProductsIndex({ products, categories }) {
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
                     {productList.length > 0 ? (
                         productList.map((product) => (
-                            <Product product={product} />
+                            <Product key={product.id} product={product} />
                         ))
                     ) : (
                         <div
