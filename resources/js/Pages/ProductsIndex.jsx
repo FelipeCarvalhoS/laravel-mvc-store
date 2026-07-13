@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "../../img/logo.png";
 import {
     Button,
@@ -10,6 +10,10 @@ import {
     Modal,
     Row,
 } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
+import { useFormStatus } from "react-dom";
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -159,6 +163,7 @@ export default function ProductsIndex({ products, categories }) {
 
             <EditModal
                 product={productBeingEdited}
+                categories={categories}
                 show={editModalShow}
                 setShow={setEditModalShow}
             />
@@ -253,17 +258,46 @@ function Product({ product, openEditModal }) {
     );
 }
 
-function EditModal({ product, show, setShow }) {
+function EditModal({ product, categories, show, setShow }) {
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const availableCategories = getAvailableCategories();
+
+    useEffect(() => {
+        async function setCategories() {
+            if (product) {
+                setSelectedCategories([...product.categories]);
+            }
+        }
+        setCategories();
+    }, [product]);
+
+    function getAvailableCategories() {
+        const availableCategories = [];
+
+        for (const category of categories) {
+            if (
+                !selectedCategories.some(
+                    (selected) => selected.id === category.id,
+                )
+            ) {
+                availableCategories.push(category);
+            }
+        }
+
+        return availableCategories;
+    }
+
     if (!product) {
         return null;
     }
+
     return (
         <Modal show={show} fullscreen="sm-down" onHide={() => setShow(false)}>
             <Modal.Header closeButton>
                 <Modal.Title>Editar Produto</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form action="" method="POST">
                     <Form.Group className="mb-3" controlId="name">
                         <Form.Label>Nome</Form.Label>
                         <Form.Control
@@ -278,7 +312,7 @@ function EditModal({ product, show, setShow }) {
                         <Form.Control
                             type="number"
                             step="0.01"
-                            inputmode="decimal"
+                            inputMode="decimal"
                             defaultValue={product.price}
                             placeholder="Digite o preço..."
                         />
@@ -289,9 +323,23 @@ function EditModal({ product, show, setShow }) {
                         <Form.Control
                             type="number"
                             step="1"
-                            inputmode="number"
+                            inputMode="number"
                             defaultValue={product.stock}
                             placeholder="Digite a quantidade..."
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Categorias</Form.Label>
+                        <Typeahead
+                            id="categories"
+                            multiple
+                            labelKey="name"
+                            options={availableCategories}
+                            onChange={setSelectedCategories}
+                            defaultSelected={product.categories}
+                            placeholder="Escolha as categorias..."
+                            emptyLabel="Não há categorias disponíveis."
                         />
                     </Form.Group>
 
@@ -304,8 +352,12 @@ function EditModal({ product, show, setShow }) {
                         />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
+                    <Button
+                        className="text-white"
+                        variant="primary"
+                        type="submit"
+                    >
+                        Confirmar alterações
                     </Button>
                 </Form>
             </Modal.Body>
