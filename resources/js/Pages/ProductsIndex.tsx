@@ -1,54 +1,43 @@
-import { useEffect, useRef, useState } from "react";
-import logo from "@/img/logo.png";
-import {
-    Button,
-    Card,
-    Col,
-    Container,
-    Form,
-    Image,
-    Modal,
-    Row,
-} from "react-bootstrap";
-import { Form as InertiaForm } from "@inertiajs/react";
-import {
-    index,
-    update,
-} from "@/js/actions/App/Http/Controllers/ProductController";
-import { Typeahead } from "react-bootstrap-typeahead";
+import { useRef, useState } from "react";
+import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
 
-const currencyFormatter = new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-});
+import logo from "@/img/logo.png";
+import {
+    index,
+    destroy,
+} from "@/js/actions/App/Http/Controllers/ProductController";
+import EditModal from "@/js/Pages/ProductsIndex/EditModal";
+import ProductCard from "@/js/Pages/ProductsIndex/ProductCard";
+import type { Product, ProductsIndexProps } from "@/js/types/products";
 
-function limitText(text, limit = 100) {
-    if (text.length <= limit) {
-        return text;
-    }
-
-    const truncatedText = text.slice(0, limit);
-    const lastWordBoundary = truncatedText.lastIndexOf(" ");
-
-    return `${truncatedText.slice(0, lastWordBoundary)}...`;
-}
-
-export default function ProductsIndex({ products, categories, filters }) {
-    const [productList, setProducts] = useState(products);
+export default function ProductsIndex({
+    products,
+    categories,
+    filters,
+}: ProductsIndexProps) {
+    const [productList, setProducts] = useState<Product[]>(products);
     const [isLoading, setIsLoading] = useState(false);
-    const searchRef = useRef(null);
-    const categorySelectRef = useRef(null);
+    const searchRef = useRef<HTMLInputElement | null>(null);
+    const categorySelectRef = useRef<HTMLSelectElement | null>(null);
     const [editModalShow, setEditModalShow] = useState(false);
-    const [productBeingEdited, setProductBeingEdited] = useState(null);
+    const [productBeingEdited, setProductBeingEdited] =
+        useState<Product | null>(null);
 
     function handleSearch() {
+        const searchInput = searchRef.current;
+        const categorySelect = categorySelectRef.current;
+
+        if (!searchInput || !categorySelect) {
+            return;
+        }
+
         setIsLoading(true);
 
         const newFilters = {
-            name: searchRef.current.value,
-            category: categorySelectRef.current.value,
+            name: searchInput.value,
+            category: categorySelect.value,
         };
 
         const newUrl = index.url({ query: newFilters });
@@ -66,7 +55,7 @@ export default function ProductsIndex({ products, categories, filters }) {
             });
     }
 
-    function openEditModal(product) {
+    function openEditModal(product: Product) {
         setProductBeingEdited(product);
         setEditModalShow(true);
     }
@@ -88,7 +77,7 @@ export default function ProductsIndex({ products, categories, filters }) {
                                             aria-label="Pesquisar por nome..."
                                             aria-describedby="search-button"
                                             ref={searchRef}
-                                            defaultValue={filters.name}
+                                            defaultValue={filters.name ?? ""}
                                         />
                                         <Button
                                             variant="secondary"
@@ -124,7 +113,10 @@ export default function ProductsIndex({ products, categories, filters }) {
                                         className="form-select"
                                         ref={categorySelectRef}
                                         onChange={handleSearch}
-                                        defaultValue={filters.category.toLowerCase()}
+                                        defaultValue={
+                                            filters.category?.toLowerCase() ??
+                                            ""
+                                        }
                                     >
                                         <option value="">Categoria</option>
                                         {categories.map((category) => (
@@ -151,10 +143,10 @@ export default function ProductsIndex({ products, categories, filters }) {
                     <Row xs={1} sm={2} md={3} lg={4} className="g-3">
                         {productList.length > 0 ? (
                             productList.map((product) => (
-                                <Product
+                                <ProductCard
                                     key={product.id}
                                     product={product}
-                                    openEditModal={openEditModal}
+                                    onEdit={openEditModal}
                                 />
                             ))
                         ) : (
@@ -183,193 +175,5 @@ export default function ProductsIndex({ products, categories, filters }) {
                 setShow={setEditModalShow}
             />
         </>
-    );
-}
-
-function Product({ product, openEditModal }) {
-    return (
-        <>
-            <div key={product.id} className="col">
-                <Card className="shadow-sm h-100">
-                    <Card.Img
-                        variant="top"
-                        as="div"
-                        className="border-bottom d-flex justify-content-center bg-body-tertiary"
-                    >
-                        <Image
-                            className="p-4 w-50 mx-auto"
-                            src={logo}
-                            alt=""
-                        ></Image>
-                    </Card.Img>
-                    <Card.Body className="d-flex flex-column justify-content-between gap-3">
-                        <div>
-                            <Card.Text
-                                as="h2"
-                                className="font-base fs-6 fw-normal mb-1"
-                            >
-                                {product.name}
-                            </Card.Text>
-                            <div>
-                                <small className="text-body-secondary">
-                                    {limitText(product.description)}
-                                </small>
-                            </div>
-                        </div>
-
-                        <div className="d-flex flex-column gap-3">
-                            <div className="hstack gap-2 flex-wrap">
-                                {product.categories.map((category) => (
-                                    <span
-                                        key={category.id}
-                                        className="badge rounded-pill bg-primary text-white"
-                                    >
-                                        {category.name}
-                                    </span>
-                                ))}
-                            </div>
-                            <div>
-                                <div className="mb-1">
-                                    <small>Quantidade: {product.stock}</small>
-                                </div>
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div className="h5">
-                                        {currencyFormatter.format(
-                                            product.price,
-                                        )}
-                                    </div>
-                                    <div className="d-flex gap-2 fs-5 text-body-tertiary">
-                                        <button
-                                            className="icon-btn icon-btn-info"
-                                            onClick={() =>
-                                                openEditModal(product)
-                                            }
-                                        >
-                                            <span className="visually-hidden">
-                                                Editar
-                                            </span>
-                                            <i className="bi bi-pencil" />
-                                        </button>
-                                        <button className="icon-btn icon-btn-danger">
-                                            <span className="visually-hidden">
-                                                Deletar
-                                            </span>
-                                            <i className="bi bi-trash" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </Card.Body>
-                </Card>
-            </div>
-        </>
-    );
-}
-
-function EditModal({ product, categories, show, setShow }) {
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const availableCategories = getAvailableCategories();
-
-    useEffect(() => {
-        async function setCategories() {
-            if (product) {
-                setSelectedCategories([...product.categories]);
-            }
-        }
-        setCategories();
-    }, [product]);
-
-    function getAvailableCategories() {
-        const availableCategories = [];
-
-        for (const category of categories) {
-            if (
-                !selectedCategories.some(
-                    (selected) => selected.id === category.id,
-                )
-            ) {
-                availableCategories.push(category);
-            }
-        }
-
-        return availableCategories;
-    }
-
-    if (!product) {
-        return null;
-    }
-
-    return (
-        <Modal show={show} fullscreen="sm-down" onHide={() => setShow(false)}>
-            <Modal.Header closeButton>
-                <Modal.Title>Editar Produto</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <InertiaForm action={update(product.id)}>
-                    <Form.Group className="mb-3" controlId="name">
-                        <Form.Label>Nome</Form.Label>
-                        <Form.Control
-                            type="text"
-                            defaultValue={product.name}
-                            placeholder="Digite o nome..."
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="price">
-                        <Form.Label>Preço</Form.Label>
-                        <Form.Control
-                            type="number"
-                            step="0.01"
-                            inputMode="decimal"
-                            defaultValue={product.price}
-                            placeholder="Digite o preço..."
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="stock">
-                        <Form.Label>Quantidade em estoque</Form.Label>
-                        <Form.Control
-                            type="number"
-                            step="1"
-                            inputMode="numeric"
-                            defaultValue={product.stock}
-                            placeholder="Digite a quantidade..."
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>Categorias</Form.Label>
-                        <Typeahead
-                            id="categories"
-                            multiple
-                            labelKey="name"
-                            options={availableCategories}
-                            onChange={setSelectedCategories}
-                            defaultSelected={product.categories}
-                            placeholder="Escolha as categorias..."
-                            emptyLabel="Não há categorias disponíveis."
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3" controlId="description">
-                        <Form.Label>Descrição</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            defaultValue={product.description}
-                            placeholder="Digite a descrição..."
-                        />
-                    </Form.Group>
-
-                    <Button
-                        className="text-white"
-                        variant="primary"
-                        type="submit"
-                    >
-                        Confirmar alterações
-                    </Button>
-                </InertiaForm>
-            </Modal.Body>
-        </Modal>
     );
 }
