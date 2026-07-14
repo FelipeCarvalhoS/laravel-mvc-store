@@ -30,7 +30,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        dd($product);
+        //
     }
 
     public function edit(Product $product)
@@ -40,9 +40,20 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
-    }
+        $validated = $request->validated();
 
+        $product->update([
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'description' => $validated['description'],
+        ]);
+
+        $product->categories()->sync($validated['categories']);
+
+        return redirect()->back();
+    }
+    
     public function destroy(Product $product)
     {
         $product->delete();
