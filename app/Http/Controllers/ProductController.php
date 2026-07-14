@@ -13,11 +13,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $name = $request->query('name');
-        $name = is_string($name) ? $name : '';
-
-        $category = $request->query('category');
-        $category = is_string($category) ? $category : '';
+        $name = (string) $request->query('name');
+        $category = (string) $request->query('category');
 
         $filtered_products = Product::query();
 
