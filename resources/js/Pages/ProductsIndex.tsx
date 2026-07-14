@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import logo from "../../img/logo.png";
+import logo from "@/img/logo.png";
 import {
     Button,
     Card,
@@ -13,7 +13,6 @@ import {
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
-import { useFormStatus } from "react-dom";
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -241,12 +240,6 @@ function Product({ product, openEditModal }) {
                                             onClick={() =>
                                                 openEditModal(product)
                                             }
-                                            data-bs-name={product.name}
-                                            data-bs-price={product.price}
-                                            data-bs-stock={product.stock}
-                                            data-bs-description={
-                                                product.description
-                                            }
                                         >
                                             <span className="visually-hidden">
                                                 Editar
@@ -335,7 +328,7 @@ function EditModal({ product, categories, show, setShow }) {
                         <Form.Control
                             type="number"
                             step="1"
-                            inputMode="number"
+                            inputMode="numeric"
                             defaultValue={product.stock}
                             placeholder="Digite a quantidade..."
                         />
