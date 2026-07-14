@@ -14,17 +14,29 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $name = $request->query('name');
+        $name = is_string($name) ? $name : '';
+
         $category = $request->query('category');
+        $category = is_string($category) ? $category : '';
 
         $filtered_products = Product::query();
 
-        if ($category) {
+        if ($request->filled('category')) {
             $filtered_products = $filtered_products->whereHas('categories', function ($q) use ($category) {
                 $q->where('name', $category);
             });
         }
 
-        $filtered_products = $filtered_products->where('name', 'like', "%$name%")->get();
+        if ($request->filled('name')) {
+            $filtered_products = $filtered_products->where('name', 'like', "%$name%");
+        }
+
+        $filtered_products = $filtered_products->get();
+
+        if ($request->expectsJson()) {
+            // Retornar apenas os dados caso seja uma request AJAX
+            return response()->json($filtered_products);
+        }
 
         return Inertia::render('ProductsIndex', [
             'products' => $filtered_products,

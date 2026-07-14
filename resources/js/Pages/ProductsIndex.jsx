@@ -47,9 +47,13 @@ export default function ProductsIndex({ products, categories, filters }) {
             category: categorySelectRef.current.value,
         }).toString();
 
-        const url = `${import.meta.env.VITE_APP_URL}/api/products?${searchParams}`;
+        const url = `${import.meta.env.VITE_APP_URL}/products?${searchParams}`;
 
-        fetch(url)
+        fetch(url, {
+            headers: {
+                Accept: "application/json",
+            },
+        })
             .then((response) => response.json())
             .then((data) => {
                 setProducts(data);
