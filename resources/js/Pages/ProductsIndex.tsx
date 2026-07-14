@@ -4,21 +4,17 @@ import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
 
 import logo from "@/img/logo.png";
-import {
-    index,
-    destroy,
-} from "@/js/actions/App/Http/Controllers/ProductController";
+import { index } from "@/js/actions/App/Http/Controllers/ProductController";
 import EditModal from "@/js/Pages/ProductsIndex/EditModal";
 import ProductCard from "@/js/Pages/ProductsIndex/ProductCard";
 import type { Product, ProductsIndexProps } from "@/js/types/products";
+import { router } from "@inertiajs/react";
 
 export default function ProductsIndex({
     products,
     categories,
     filters,
 }: ProductsIndexProps) {
-    const [productList, setProducts] = useState<Product[]>(products);
-    const [isLoading, setIsLoading] = useState(false);
     const searchRef = useRef<HTMLInputElement | null>(null);
     const categorySelectRef = useRef<HTMLSelectElement | null>(null);
     const [editModalShow, setEditModalShow] = useState(false);
@@ -33,8 +29,6 @@ export default function ProductsIndex({
             return;
         }
 
-        setIsLoading(true);
-
         const newFilters = {
             name: searchInput.value,
             category: categorySelect.value,
@@ -42,17 +36,16 @@ export default function ProductsIndex({
 
         const newUrl = index.url({ query: newFilters });
 
-        fetch(newUrl, {
-            headers: {
-                Accept: "application/json",
+        router.get(
+            newUrl,
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                only: ["products"],
             },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setProducts(data);
-                setIsLoading(false);
-                window.history.pushState({ path: newUrl }, "", newUrl);
-            });
+        );
     }
 
     function openEditModal(product: Product) {
@@ -83,27 +76,9 @@ export default function ProductsIndex({
                                             variant="secondary"
                                             id="search-button"
                                             onClick={handleSearch}
-                                            disabled={isLoading}
                                         >
-                                            {isLoading ? (
-                                                <>
-                                                    <span
-                                                        role="status"
-                                                        className="me-2"
-                                                    >
-                                                        Pesquisando...
-                                                    </span>
-                                                    <span
-                                                        className="spinner-border spinner-border-sm"
-                                                        aria-hidden="true"
-                                                    ></span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    Pesquisar
-                                                    <i className="bi bi-search ms-2"></i>
-                                                </>
-                                            )}
+                                            Pesquisar
+                                            <i className="bi bi-search ms-2"></i>
                                         </Button>
                                     </div>
                                 </Col>
@@ -141,8 +116,8 @@ export default function ProductsIndex({
                         </div>
                     </Row>
                     <Row xs={1} sm={2} md={3} lg={4} className="g-3">
-                        {productList.length > 0 ? (
-                            productList.map((product) => (
+                        {products.length > 0 ? (
+                            products.map((product) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}

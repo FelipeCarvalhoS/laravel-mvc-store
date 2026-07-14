@@ -5,7 +5,7 @@ import logo from "@/img/logo.png";
 import type { Product } from "@/js/types/products";
 import { currencyFormatter, limitText } from "@/js/utils/products";
 import { destroy } from "@/js/routes/products";
-import { router } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 
 type ProductCardProps = {
     product: Product;
@@ -67,17 +67,19 @@ export default function ProductCard({ product, onEdit }: ProductCardProps) {
                                         </span>
                                         <i className="bi bi-pencil" />
                                     </button>
-                                    <button
+                                    <Link
                                         className="icon-btn icon-btn-danger"
-                                        onClick={() =>
-                                            router.delete(destroy(product.id))
-                                        }
+                                        href={destroy(product.id)}
+                                        method="delete"
+                                        as="button"
+                                        preserveScroll
+                                        only={["products"]}
                                     >
                                         <span className="visually-hidden">
                                             Deletar
                                         </span>
                                         <i className="bi bi-trash" />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
