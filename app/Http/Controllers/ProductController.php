@@ -67,6 +67,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
+        dd($request);
         $validated = $request->validated();
 
         $product->update([

@@ -10,6 +10,11 @@ import {
     Modal,
     Row,
 } from "react-bootstrap";
+import { Form as InertiaForm } from "@inertiajs/react";
+import {
+    index,
+    update,
+} from "@/js/actions/App/Http/Controllers/ProductController";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
@@ -41,14 +46,14 @@ export default function ProductsIndex({ products, categories, filters }) {
     function handleSearch() {
         setIsLoading(true);
 
-        const searchParams = new URLSearchParams({
+        const newFilters = {
             name: searchRef.current.value,
             category: categorySelectRef.current.value,
-        }).toString();
+        };
 
-        const url = `${import.meta.env.VITE_APP_URL}/products?${searchParams}`;
+        const newUrl = index.url({ query: newFilters });
 
-        fetch(url, {
+        fetch(newUrl, {
             headers: {
                 Accept: "application/json",
             },
@@ -57,7 +62,6 @@ export default function ProductsIndex({ products, categories, filters }) {
             .then((data) => {
                 setProducts(data);
                 setIsLoading(false);
-                const newUrl = `${window.location.pathname}?${searchParams}`;
                 window.history.pushState({ path: newUrl }, "", newUrl);
             });
     }
@@ -302,7 +306,7 @@ function EditModal({ product, categories, show, setShow }) {
                 <Modal.Title>Editar Produto</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form action="" method="POST">
+                <InertiaForm action={update(product.id)}>
                     <Form.Group className="mb-3" controlId="name">
                         <Form.Label>Nome</Form.Label>
                         <Form.Control
@@ -364,7 +368,7 @@ function EditModal({ product, categories, show, setShow }) {
                     >
                         Confirmar alterações
                     </Button>
-                </Form>
+                </InertiaForm>
             </Modal.Body>
         </Modal>
     );

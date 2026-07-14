@@ -4,6 +4,7 @@ import { google } from "laravel-vite-plugin/fonts";
 import react from "@vitejs/plugin-react";
 import inertia from "@inertiajs/vite";
 import { fileURLToPath, URL } from "node:url";
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 
 export default defineConfig({
     resolve: {
@@ -29,6 +30,7 @@ export default defineConfig({
         }),
         inertia(),
         react(),
+        wayfinder(),
     ],
     server: {
         watch: {
