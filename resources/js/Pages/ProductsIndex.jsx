@@ -31,19 +31,22 @@ function limitText(text, limit = 100) {
     return `${truncatedText.slice(0, lastWordBoundary)}...`;
 }
 
-export default function ProductsIndex({ products, categories }) {
+export default function ProductsIndex({ products, categories, filters }) {
     const [productList, setProducts] = useState(products);
     const [isLoading, setIsLoading] = useState(false);
     const searchRef = useRef(null);
+    const categorySelectRef = useRef(null);
     const [editModalShow, setEditModalShow] = useState(false);
     const [productBeingEdited, setProductBeingEdited] = useState(null);
 
-    function handleSearch(event) {
+    function handleSearch() {
         setIsLoading(true);
 
         const searchParams = new URLSearchParams({
             name: searchRef.current.value,
+            category: categorySelectRef.current.value,
         }).toString();
+
         const url = `${import.meta.env.VITE_APP_URL}/api/products?${searchParams}`;
 
         fetch(url)
@@ -51,6 +54,8 @@ export default function ProductsIndex({ products, categories }) {
             .then((data) => {
                 setProducts(data);
                 setIsLoading(false);
+                const newUrl = `${window.location.pathname}?${searchParams}`;
+                window.history.pushState({ path: newUrl }, "", newUrl);
             });
     }
 
@@ -76,6 +81,7 @@ export default function ProductsIndex({ products, categories }) {
                                             aria-label="Pesquisar por nome..."
                                             aria-describedby="search-button"
                                             ref={searchRef}
+                                            defaultValue={filters.name}
                                         />
                                         <Button
                                             variant="secondary"
@@ -109,13 +115,15 @@ export default function ProductsIndex({ products, categories }) {
                                     <select
                                         id="category"
                                         className="form-select"
-                                        defaultValue=""
+                                        ref={categorySelectRef}
+                                        onChange={handleSearch}
+                                        defaultValue={filters.category.toLowerCase()}
                                     >
                                         <option value="">Categoria</option>
                                         {categories.map((category) => (
                                             <option
                                                 key={category.id}
-                                                value={category.id}
+                                                value={category.name.toLowerCase()}
                                             >
                                                 {category.name}
                                             </option>

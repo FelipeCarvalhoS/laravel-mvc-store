@@ -14,8 +14,26 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $name = $request->query('name');
-        $filtered_products = Product::where('name', 'like', "%$name%")->get();
-        return Inertia::render('ProductsIndex', ['products' => $filtered_products, 'categories' => Category::all()]);
+        $category = $request->query('category');
+
+        $filtered_products = Product::query();
+
+        if ($category) {
+            $filtered_products = $filtered_products->whereHas('categories', function ($q) use ($category) {
+                $q->where('name', $category);
+            });
+        }
+
+        $filtered_products = $filtered_products->where('name', 'like', "%$name%")->get();
+
+        return Inertia::render('ProductsIndex', [
+            'products' => $filtered_products,
+            'categories' => Category::all(),
+            'filters' => [
+                'name' => $name,
+                'category' => $category,
+            ],
+        ]);
     }
 
     public function create()
