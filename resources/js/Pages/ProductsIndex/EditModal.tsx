@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { Form as InertiaForm, useForm } from "@inertiajs/react";
 import { Button, Form, Modal } from "react-bootstrap";
@@ -21,6 +21,8 @@ export default function EditModal({
     show,
     setShow,
 }: EditModalProps) {
+    const [submissionWasRejected, setSubmissionWasRejected] = useState(false);
+
     const selectedCategories = useRef<number[]>([
         ...(product.categories.map((c) => c.id) || []),
     ]);
@@ -37,6 +39,7 @@ export default function EditModal({
     }
 
     function handleClose() {
+        setSubmissionWasRejected(false);
         setShow(false);
     }
 
@@ -54,22 +57,26 @@ export default function EditModal({
                         categories: selectedCategories.current,
                     })}
                     onSuccess={handleClose}
+                    onError={() => setSubmissionWasRejected(true)}
                     disableWhileProcessing
                 >
-                    {({ processing, errors, resetAndClearErrors }) => (
+                    {({ processing, errors }) => (
                         <>
                             <Form.Group className="mb-3" controlId="name">
                                 <Form.Label>Nome</Form.Label>
                                 <Form.Control
                                     name="name"
-                                    isValid={!errors.name}
+                                    isValid={
+                                        submissionWasRejected && !errors.name
+                                    }
                                     isInvalid={!!errors.name}
                                     type="text"
                                     defaultValue={product.name}
                                     placeholder="Digite o nome..."
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.name}
+                                    Campo obrigatório. O valor deve ter no
+                                    máximo 100 caracteres.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
@@ -77,7 +84,9 @@ export default function EditModal({
                                 <Form.Label>Preço</Form.Label>
                                 <Form.Control
                                     name="price"
-                                    isValid={!errors.price}
+                                    isValid={
+                                        submissionWasRejected && !errors.price
+                                    }
                                     isInvalid={!!errors.price}
                                     type="number"
                                     step="0.01"
@@ -86,7 +95,9 @@ export default function EditModal({
                                     placeholder="Digite o preço..."
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.price}
+                                    Campo obrigatório. O valor deve ser um
+                                    número entre 0 e 999.999,99, com até duas
+                                    casas decimais.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
@@ -94,7 +105,9 @@ export default function EditModal({
                                 <Form.Label>Quantidade em estoque</Form.Label>
                                 <Form.Control
                                     name="stock"
-                                    isValid={!errors.stock}
+                                    isValid={
+                                        submissionWasRejected && !errors.stock
+                                    }
                                     isInvalid={!!errors.stock}
                                     type="number"
                                     step="1"
@@ -103,7 +116,8 @@ export default function EditModal({
                                     placeholder="Digite a quantidade..."
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.stock}
+                                    Campo obrigatório. O valor deve ser um
+                                    número inteiro entre 0 e 65535.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
@@ -111,7 +125,10 @@ export default function EditModal({
                                 <Form.Label>Categorias</Form.Label>
                                 <Typeahead
                                     multiple
-                                    isValid={!errors.categories}
+                                    isValid={
+                                        submissionWasRejected &&
+                                        !errors.categories
+                                    }
                                     isInvalid={!!errors.categories}
                                     labelKey="name"
                                     options={availableCategories}
@@ -121,7 +138,7 @@ export default function EditModal({
                                     emptyLabel="Não há categorias disponíveis."
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.categories}
+                                    Campo obrigatório.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
@@ -132,14 +149,18 @@ export default function EditModal({
                                 <Form.Label>Descrição</Form.Label>
                                 <Form.Control
                                     name="description"
-                                    isValid={!errors.description}
+                                    isValid={
+                                        submissionWasRejected &&
+                                        !errors.description
+                                    }
                                     isInvalid={!!errors.description}
                                     as="textarea"
                                     defaultValue={product.description}
                                     placeholder="Digite a descrição..."
                                 />
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.description}
+                                    Campo obrigatório. O valor deve ter no
+                                    máximo 255 caracteres.
                                 </Form.Control.Feedback>
                             </Form.Group>
 
