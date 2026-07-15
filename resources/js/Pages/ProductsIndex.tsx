@@ -143,12 +143,14 @@ export default function ProductsIndex({
                 </Container>
             </main>
 
-            <EditModal
-                product={productBeingEdited}
-                categories={categories}
-                show={editModalShow}
-                setShow={setEditModalShow}
-            />
+            {productBeingEdited && (
+                <EditModal
+                    product={productBeingEdited}
+                    categories={categories}
+                    show={editModalShow}
+                    setShow={setEditModalShow}
+                />
+            )}
         </>
     );
 }
