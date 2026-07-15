@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Form as InertiaForm, useForm } from "@inertiajs/react";
 import { Button, Form, Modal } from "react-bootstrap";
@@ -22,20 +22,24 @@ export default function EditModal({
     setShow,
 }: EditModalProps) {
     const [submissionWasRejected, setSubmissionWasRejected] = useState(false);
-
-    const selectedCategories = useRef<number[]>([
-        ...(product.categories.map((c) => c.id) || []),
-    ]);
-
-    const availableCategories = categories.filter(
-        (category) =>
-            !product.categories.some((selected) => selected.id === category.id),
+    const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>(
+        product.categories
+    );
+    const availableCategories = getAvailableCategories(
+        categories,
+        selectedCategories,
     );
 
-    function handleSelectedCategoriesChange(selected: Option[]) {
-        const newCategories = selected as ProductCategory[];
-        const categoryIds = newCategories.map((category) => category.id);
-        selectedCategories.current = categoryIds;
+    useEffect(() => {
+        async function updateCategories() {
+            setSelectedCategories(product.categories);
+        }
+        updateCategories();
+    }, [product]);
+
+    function handleCategoriesChange(_newCategories: Option[]) {
+        const newCategories = _newCategories as ProductCategory[];
+        setSelectedCategories(newCategories);
     }
 
     function handleClose() {
@@ -54,7 +58,7 @@ export default function EditModal({
                     action={update(product.id)}
                     transform={(data) => ({
                         ...data,
-                        categories: selectedCategories.current,
+                        categories: selectedCategories.map((category) => category.id),
                     })}
                     onSuccess={handleClose}
                     onError={() => setSubmissionWasRejected(true)}
@@ -133,7 +137,7 @@ export default function EditModal({
                                     labelKey="name"
                                     options={availableCategories}
                                     defaultSelected={product.categories}
-                                    onChange={handleSelectedCategoriesChange}
+                                    onChange={handleCategoriesChange}
                                     placeholder="Escolha as categorias..."
                                     emptyLabel="Não há categorias disponíveis."
                                 />
@@ -187,5 +191,15 @@ export default function EditModal({
                 </InertiaForm>
             </Modal.Body>
         </Modal>
+    );
+}
+
+function getAvailableCategories(
+    categories: ProductCategory[],
+    selectedCategories: ProductCategory[],
+) {
+    return categories.filter(
+        (category) =>
+            !selectedCategories.some((selected) => selected.id === category.id),
     );
 }
