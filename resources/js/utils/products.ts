@@ -3,7 +3,7 @@ export const currencyFormatter = new Intl.NumberFormat("pt-BR", {
     currency: "BRL",
 });
 
-export function limitText(text: string, limit = 100): string {
+export function limitText(text: string, limit = 150): string {
     if (text.length <= limit) {
         return text;
     }
