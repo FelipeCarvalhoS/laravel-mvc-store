@@ -4,27 +4,31 @@ import { Form as InertiaForm, useForm } from "@inertiajs/react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-import { update } from "@/js/actions/App/Http/Controllers/ProductController";
+import {
+    store,
+    update,
+} from "@/js/actions/App/Http/Controllers/ProductController";
 import type { Product, ProductCategory } from "@/js/types/products";
 import { Option } from "react-bootstrap-typeahead/types/types";
 
-type EditModalProps = {
-    product: Product;
+type FormModalProps = {
+    product: Product | null;
     categories: ProductCategory[];
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function EditModal({
+export default function FormModal({
     product,
     categories,
     show,
     setShow,
-}: EditModalProps) {
+}: FormModalProps) {
+    const isCreating = !product;
     const [submissionWasRejected, setSubmissionWasRejected] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>(
-        product.categories
-    );
+    const [selectedCategories, setSelectedCategories] = useState<
+        ProductCategory[]
+    >(isCreating ? [] : product.categories);
     const availableCategories = getAvailableCategories(
         categories,
         selectedCategories,
@@ -32,7 +36,7 @@ export default function EditModal({
 
     useEffect(() => {
         async function updateCategories() {
-            setSelectedCategories(product.categories);
+            setSelectedCategories(isCreating ? [] : product.categories);
         }
         updateCategories();
     }, [product]);
@@ -50,15 +54,19 @@ export default function EditModal({
     return (
         <Modal show={show} fullscreen="sm-down" onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Editar Produto</Modal.Title>
+                <Modal.Title>
+                    {isCreating ? "Adicionar Produto" : "Editar Produto"}
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <InertiaForm
                     noValidate
-                    action={update(product.id)}
+                    action={isCreating ? store() : update(product.id)}
                     transform={(data) => ({
                         ...data,
-                        categories: selectedCategories.map((category) => category.id),
+                        categories: selectedCategories.map(
+                            (category) => category.id,
+                        ),
                     })}
                     onSuccess={handleClose}
                     onError={() => setSubmissionWasRejected(true)}
@@ -75,7 +83,9 @@ export default function EditModal({
                                     }
                                     isInvalid={!!errors.name}
                                     type="text"
-                                    defaultValue={product.name}
+                                    defaultValue={
+                                        isCreating ? undefined : product.name
+                                    }
                                     placeholder="Digite o nome..."
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -95,7 +105,9 @@ export default function EditModal({
                                     type="number"
                                     step="0.01"
                                     inputMode="decimal"
-                                    defaultValue={product.price}
+                                    defaultValue={
+                                        isCreating ? undefined : product.price
+                                    }
                                     placeholder="Digite o preço..."
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -116,7 +128,9 @@ export default function EditModal({
                                     type="number"
                                     step="1"
                                     inputMode="numeric"
-                                    defaultValue={product.stock}
+                                    defaultValue={
+                                        isCreating ? undefined : product.stock
+                                    }
                                     placeholder="Digite a quantidade..."
                                 />
                                 <Form.Control.Feedback type="invalid">
@@ -136,7 +150,9 @@ export default function EditModal({
                                     isInvalid={!!errors.categories}
                                     labelKey="name"
                                     options={availableCategories}
-                                    defaultSelected={product.categories}
+                                    defaultSelected={
+                                        isCreating ? [] : product.categories
+                                    }
                                     onChange={handleCategoriesChange}
                                     placeholder="Escolha as categorias..."
                                     emptyLabel="Não há categorias disponíveis."
@@ -159,7 +175,11 @@ export default function EditModal({
                                     }
                                     isInvalid={!!errors.description}
                                     as="textarea"
-                                    defaultValue={product.description}
+                                    defaultValue={
+                                        isCreating
+                                            ? undefined
+                                            : product.description
+                                    }
                                     placeholder="Digite a descrição..."
                                 />
                                 <Form.Control.Feedback type="invalid">

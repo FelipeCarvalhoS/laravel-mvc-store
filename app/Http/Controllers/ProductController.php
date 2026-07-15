@@ -45,24 +45,21 @@ class ProductController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(StoreProductRequest $request)
     {
-        //
-    }
+        $validated = $request->validated();
 
-    public function show(Product $product)
-    {
-        //
-    }
+        $product = Product::create([
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'description' => $validated['description'],
+            'categories' => $validated['categories'],
+        ]);
 
-    public function edit(Product $product)
-    {
-        //
+        $product->categories()->sync($validated['categories']);
+
+        return redirect()->back();
     }
 
     public function update(UpdateProductRequest $request, Product $product)

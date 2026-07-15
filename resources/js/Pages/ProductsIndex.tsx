@@ -5,7 +5,7 @@ import "react-bootstrap-typeahead/css/Typeahead.bs5.css";
 
 import logo from "@/img/logo.png";
 import { index } from "@/js/actions/App/Http/Controllers/ProductController";
-import EditModal from "@/js/Pages/ProductsIndex/EditModal";
+import FormModal from "@/js/Pages/ProductsIndex/FormModal";
 import ProductCard from "@/js/Pages/ProductsIndex/ProductCard";
 import type { Product, ProductsIndexProps } from "@/js/types/products";
 import { router } from "@inertiajs/react";
@@ -17,7 +17,7 @@ export default function ProductsIndex({
 }: ProductsIndexProps) {
     const searchRef = useRef<HTMLInputElement | null>(null);
     const categorySelectRef = useRef<HTMLSelectElement | null>(null);
-    const [editModalShow, setEditModalShow] = useState(false);
+    const [formModalShow, setFormModalShow] = useState(false);
     const [productBeingEdited, setProductBeingEdited] =
         useState<Product | null>(null);
 
@@ -48,9 +48,9 @@ export default function ProductsIndex({
         );
     }
 
-    function openEditModal(product: Product) {
-        setProductBeingEdited(product);
-        setEditModalShow(true);
+    function openFormModal(productToEdit?: Product) {
+        setProductBeingEdited(productToEdit ?? null);
+        setFormModalShow(true);
     }
 
     return (
@@ -110,6 +110,7 @@ export default function ProductsIndex({
                             <Button
                                 className="w-100 text-white"
                                 variant="success"
+                                onClick={() => openFormModal()}
                             >
                                 Adicionar...
                             </Button>
@@ -121,7 +122,7 @@ export default function ProductsIndex({
                                 <ProductCard
                                     key={product.id}
                                     product={product}
-                                    onEdit={openEditModal}
+                                    onEdit={() => openFormModal(product)}
                                 />
                             ))
                         ) : (
@@ -143,14 +144,12 @@ export default function ProductsIndex({
                 </Container>
             </main>
 
-            {productBeingEdited && (
-                <EditModal
-                    product={productBeingEdited}
-                    categories={categories}
-                    show={editModalShow}
-                    setShow={setEditModalShow}
-                />
-            )}
+            <FormModal
+                product={productBeingEdited}
+                categories={categories}
+                show={formModalShow}
+                setShow={setFormModalShow}
+            />
         </>
     );
 }
