@@ -8,12 +8,12 @@ import {
     store,
     update,
 } from "@/js/actions/App/Http/Controllers/ProductController";
-import type { Product, ProductCategory } from "@/js/types/products";
+import type { Product, Category } from "@/js/types";
 import { Option } from "react-bootstrap-typeahead/types/types";
 
 type FormModalProps = {
     product: Product | null;
-    categories: ProductCategory[];
+    categories: Category[];
     show: boolean;
     setShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -26,9 +26,9 @@ export default function FormModal({
 }: FormModalProps) {
     const isCreating = !product;
     const [submissionWasRejected, setSubmissionWasRejected] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState<
-        ProductCategory[]
-    >(isCreating ? [] : product.categories);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>(
+        isCreating ? [] : product.categories,
+    );
     const availableCategories = getAvailableCategories(
         categories,
         selectedCategories,
@@ -42,7 +42,7 @@ export default function FormModal({
     }, [product]);
 
     function handleCategoriesChange(_newCategories: Option[]) {
-        const newCategories = _newCategories as ProductCategory[];
+        const newCategories = _newCategories as Category[];
         setSelectedCategories(newCategories);
     }
 
@@ -215,8 +215,8 @@ export default function FormModal({
 }
 
 function getAvailableCategories(
-    categories: ProductCategory[],
-    selectedCategories: ProductCategory[],
+    categories: Category[],
+    selectedCategories: Category[],
 ) {
     return categories.filter(
         (category) =>

@@ -1,4 +1,4 @@
-export type ProductCategory = {
+export type Category = {
     id: number;
     name: string;
 };
@@ -9,7 +9,7 @@ export type Product = {
     description: string;
     price: number;
     stock: number;
-    categories: ProductCategory[];
+    categories: Category[];
 };
 
 export type ProductFilters = {
@@ -19,6 +19,6 @@ export type ProductFilters = {
 
 export type ProductsIndexProps = {
     products: Product[];
-    categories: ProductCategory[];
+    categories: Category[];
     filters: ProductFilters;
 };

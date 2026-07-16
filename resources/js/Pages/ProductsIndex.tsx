@@ -7,7 +7,7 @@ import logo from "@/img/logo.png";
 import { index } from "@/js/actions/App/Http/Controllers/ProductController";
 import FormModal from "@/js/Pages/ProductsIndex/FormModal";
 import ProductCard from "@/js/Pages/ProductsIndex/ProductCard";
-import type { Product, ProductsIndexProps } from "@/js/types/products";
+import type { Product, ProductsIndexProps } from "@/js/types";
 import { router } from "@inertiajs/react";
 
 export default function ProductsIndex({

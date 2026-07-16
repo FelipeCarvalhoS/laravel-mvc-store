@@ -55,17 +55,6 @@
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
         ],
-        "docker": [
-            "@docker:rebuild",
-            "@docker:run"
-        ],
-        "docker:rebuild": [
-            "docker rmi store:latest --force",
-            "docker build . --tag store"
-        ],
-        "docker:run": [
-            "docker run -it -p 8000:80 -p 443:443 -p 443:443/udp store:latest"
-        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

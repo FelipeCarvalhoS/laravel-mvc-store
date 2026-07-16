@@ -2,8 +2,8 @@ import { Card, Image } from "react-bootstrap";
 
 import logo from "@/img/logo.png";
 
-import type { Product } from "@/js/types/products";
-import { currencyFormatter, limitText } from "@/js/utils/products";
+import type { Product } from "@/js/types";
+import { currencyFormatter, limitText } from "@/js/utils";
 import { destroy } from "@/js/routes/products";
 import { Link } from "@inertiajs/react";
 
