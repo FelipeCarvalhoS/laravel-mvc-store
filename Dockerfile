@@ -44,15 +44,26 @@ FROM dunglas/frankenphp:php8.4
 WORKDIR /app
 
 RUN install-php-extensions \
-	pdo_mysql
+    pdo_mysql
+
+# 1. Strip Linux capabilities from the frankenphp binary so rootless environments permit execution
+RUN setcap -r /usr/local/bin/frankenphp
 
 COPY --from=composer /app .
 COPY --from=frontend /app/public/build ./public/build
 
+# 2. Grant permissions for both Laravel and Caddy/FrankenPHP working directories
 RUN chown -R www-data:www-data \
     storage \
-    bootstrap/cache
-    
-EXPOSE 80
+    bootstrap/cache \
+    /config/caddy \
+    /data/caddy
+
+# 3. Configure server to use an unprivileged port (8080)
+ENV SERVER_NAME=":8080"
+EXPOSE 8080
+
+# 4. Switch to non-root user
+USER www-data
 
 CMD ["frankenphp", "php-server", "-r", "public/"]
