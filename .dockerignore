@@ -1,5 +1,0 @@
-.git
-bootstrap/cache/*.php
-!bootstrap/cache/.gitignore
-vendor
-node_modules
