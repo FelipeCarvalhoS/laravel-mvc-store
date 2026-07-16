@@ -30,7 +30,10 @@ export default defineConfig({
         }),
         inertia(),
         react(),
-        wayfinder(),
+        wayfinder({
+            command:
+                'echo "Wayfinder is being ignored in npm run build to avoid errors with the Node stage in the Dockerfile (due to it not having PHP to run php artisan wayfinder:generate). Therefore, it is expected that the Wayfinder types are generated in another step."',
+        }),
     ],
     server: {
         watch: {

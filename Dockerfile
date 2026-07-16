@@ -1,4 +1,4 @@
-# ---------- Install PHP dependencies ----------
+# ---------- Composer ----------
 FROM composer:2 AS composer
 
 WORKDIR /app
@@ -17,43 +17,42 @@ RUN composer dump-autoload --optimize
 
 RUN php artisan package:discover
 
+# Clear cached routes for Wayfinder to work properly
+RUN php artisan route:clear
 
-# ---------- Build frontend assets ----------
-FROM node:22-slim AS frontend
+RUN php artisan optimize
+RUN php artisan wayfinder:generate
+
+
+# ---------- Frontend ----------
+FROM node:22-alpine AS frontend
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci --include=dev
+COPY package.json package-lock.json ./
 
-COPY . .
-RUN npm run build -- --debug
-
-
-# ---------- Production ----------
-FROM php:8.4-fpm
-
-# Install PHP extensions
-RUN apt-get update && apt-get install -y \
-    nginx \
-    supervisor \
-    libzip-dev \
-    zip \
-    unzip \
-    && docker-php-ext-install pdo_mysql zip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /var/www/html
+RUN npm ci
 
 COPY --from=composer /app .
-COPY --from=frontend /app/public/build public/build
 
-COPY docker/nginx.conf /etc/nginx/sites-enabled/default
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN npm run build
 
-RUN chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 8000
+# ---------- Runtime ----------
+FROM dunglas/frankenphp:php8.4
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+WORKDIR /app
+
+RUN install-php-extensions \
+	pdo_mysql
+
+COPY --from=composer /app .
+COPY --from=frontend /app/public/build ./public/build
+
+RUN chown -R www-data:www-data \
+    storage \
+    bootstrap/cache
+    
+EXPOSE 80
+
+CMD ["frankenphp", "php-server", "-r", "public/"]

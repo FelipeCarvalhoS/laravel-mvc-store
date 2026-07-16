@@ -9,7 +9,7 @@
 
         @fonts
         @viteReactRefresh
-        @vite('resources/js/app.jsx')
+        @vite('resources/js/app.tsx')
         <x-inertia::head />
     </head>
 
