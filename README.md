@@ -14,7 +14,7 @@
 - Framework frontend em JavaScript (linguagem solictada pelo enunciado).
 - Integrado ao Laravel usando a biblioteca Inertia.
 - Acrescentei TypeScript para ter checagem de tipos.
-- Usei o Wayfinder para poder usar rotas definidas nos meus controllers do Laravel
+- Usei o Wayfinder para poder usar rotas definidas nos meus controllers do Laravel dentro do React.
 
 **Estilos**: Bootstrap e React Bootstrap
 
@@ -42,8 +42,8 @@ O Laravel já vem com uma estrutura de diretórios bem robusta, porém, para ess
 
 ## Como fiz consultas ao banco de dados
 
-O Laravel possui uma ORM para consultas ao banco de dados chamada de Eloquent. Decidi usá-la para realizar consultas no lugar de escrever SQL pelo fato de ser mais simples e ergonômico. No entanto, como o enunciado exige "usar consultas SQL avançadas", achei que seria importante mostrar o SQL que é executado pelo Eloquent, visto que ORMs costumam abstrair isso. Por isso, coloquei comentários no arquivo `ProductController.php` mostrando o SQL que é executado.
+O Laravel possui uma ORM chamada de Eloquent. Decidi usá-la para realizar consultas no lugar de escrever SQL pelo fato de ser mais simples e ergonômico. No entanto, como o enunciado menciona "usar consultas SQL avançadas", achei que seria importante mostrar o SQL que é executado pelo Eloquent, visto que ORMs abstraem isso. Portanto, coloquei comentários no arquivo `ProductController.php` para mostrar o SQL que é executado pela ORM.
 
 ## Em relação à busca de produtos sem recarregar a página com AJAX
 
-Visto que eu já estava utilizando Inertia, que é uma biblioteca que pode fazer requisições ao Laravel diretamente do frontend também sem recarregar a página, decidi utilizá-la para a busca de produtos em vez de usar o `fetch()`, pois dessa forma eu poderia alcançar a mesma funcionalidade com menos código para deixá-lo mais limpo e fácil de compreender. Quando a pesquisa está sendo processada pelo Inertia, uma barra de carregamento aparece no topo da página e, quando o processamento termina, os resultados são exibidos sem recarregar a página.
+Visto que eu já estava utilizando o Inertia, que é uma biblioteca que pode fazer requisições ao Laravel diretamente do frontend sem recarregar a página, decidi utilizá-la para a busca de produtos em vez de usar o `fetch()`. Dessa forma, eu poderia alcançar a mesma funcionalidade com menos código para deixá-lo mais limpo e fácil de compreender. Quando a pesquisa está sendo processada pelo Inertia, uma barra de carregamento aparece no topo da página e, assim que o processamento termina, os resultados são exibidos sem recarregar a página.
