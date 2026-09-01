@@ -1,6 +1,4 @@
-# Detalhes
-
-## Tech stack
+# Tech stack
 
 **Backend**: Laravel
 
@@ -20,7 +18,7 @@
 
 **Banco de dados**: MySQL
 
-## Arquivos mais importantes
+# Arquivos mais importantes
 
 O Laravel já vem com uma estrutura de diretórios bem robusta, porém, para esse teste, os diretórios/arquivos que mais interessam são:
 
@@ -31,7 +29,3 @@ O Laravel já vem com uma estrutura de diretórios bem robusta, porém, para ess
 - `app/Http/Requests/`: defini a lógica de validação de requests para criação e edição de produtos.
 - `resources/js/Pages/`: criei as páginas/componentes do React que são invocados nas rotas do Laravel por meio do Inertia.
 - `database/seeders/CategoryAndProductSeeder.php`: defini o seeder para popular o banco.
-
-## Em relação à busca de produtos sem recarregar a página com AJAX
-
-Visto que eu já estava utilizando o Inertia, que é uma biblioteca que pode fazer requisições ao Laravel diretamente do frontend sem recarregar a página, decidi utilizá-la para a busca de produtos em vez de usar o `fetch()`. Dessa forma, eu poderia alcançar a mesma funcionalidade com menos código para deixá-lo mais limpo e fácil de compreender. Quando a pesquisa está sendo processada pelo Inertia, uma barra de carregamento aparece no topo da página e, assim que o processamento termina, os resultados são exibidos sem recarregar a página.
