@@ -1,17 +1,15 @@
-# Detalhes de como realizei o teste
-
-> **Nota**: Escrevi o código em inglês por questão de costume e, ao meu ver, por deixar o código mais limpo. Em alguns arquivos, deixei comentários em português quando achei que seria importante clarificar algo para quem fosse avaliar o teste.
+# Detalhes
 
 ## Tech stack
 
 **Backend**: Laravel
 
-- Framework full-stack em PHP (linguagem solicitada pelo enunciado).
+- Framework full-stack em PHP.
 - Ele segue o padrão MVC.
 
 **Frontend**: React
 
-- Framework frontend em JavaScript (linguagem solictada pelo enunciado).
+- Framework frontend em JavaScript.
 - Integrado ao Laravel usando a biblioteca Inertia.
 - Acrescentei TypeScript para ter checagem de tipos.
 - Usei o Wayfinder para poder usar rotas definidas nos meus controllers do Laravel dentro do React.
@@ -20,13 +18,7 @@
 
 - Escolhi usá-los para facilitar a estilização de componentes comuns como formulários, cards, inputs, etc.
 
-**Banco de dados**: MySQL (banco solicitado pelo enunciado)
-
-- Usei um banco de dados gratuito do FreeDB.
-
-**Deployment**: Laravel Cloud
-
-- Visite o app em https://laravel-mvc-store-production-hp2vgt.laravel.cloud.
+**Banco de dados**: MySQL
 
 ## Arquivos mais importantes
 
@@ -39,10 +31,6 @@ O Laravel já vem com uma estrutura de diretórios bem robusta, porém, para ess
 - `app/Http/Requests/`: defini a lógica de validação de requests para criação e edição de produtos.
 - `resources/js/Pages/`: criei as páginas/componentes do React que são invocados nas rotas do Laravel por meio do Inertia.
 - `database/seeders/CategoryAndProductSeeder.php`: defini o seeder para popular o banco.
-
-## Como fiz consultas ao banco de dados
-
-O Laravel possui uma ORM chamada de Eloquent. Decidi usá-la para realizar consultas no lugar de escrever SQL pelo fato de ser mais simples e ergonômico. No entanto, como o enunciado menciona "usar consultas SQL avançadas", achei que seria importante mostrar o SQL que é executado pelo Eloquent, visto que ORMs abstraem isso. Portanto, coloquei comentários no arquivo `ProductController.php` para mostrar o SQL que é executado pela ORM.
 
 ## Em relação à busca de produtos sem recarregar a página com AJAX
 
